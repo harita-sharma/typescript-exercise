@@ -1,1 +1,1 @@
-typescript-exercise
+typescript-exercise using lodash
