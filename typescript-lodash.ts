@@ -1,55 +1,53 @@
-var _ = require('lodash')
+import * as _ from "lodash";
 
-const members = [
-  
-    {name: 'Laveesh Gupta', age: 20},
-    {name: 'Yash Jangid', age: 40},
-    {name: 'Firoz Khan', age: 41},
-    {name: 'Amrit Srivastava', age: 17},
-    {name: 'Chandraprakash Sharma'},
-    {name: 'Swpril Ahuja', age: 45},
-    {name: 'Yogesh Khatri', age: 51}
+export type m = {name: string, age?: number};
+const members: m[] = [
+    { name: 'Laveesh Gupta', age: 20},
+    { name: 'Yash Jangid', age: 40},
+    { name: 'Firoz Khan', age: 41},
+    { name: 'Amrit Srivastava', age: 17},
+    { name: 'Chandraprakash Sharma'},
+    { name: 'Swpril Ahuja', age: 45},
+    { name: 'Yogesh Khatri', age: 51},
   ];
 
   //question1
   //get array of first names of everyone
-  const firstname = _.map( members, value => {
-    const name = _.split(value.name, " " , 2)
-    return name[0]
- })
- console.log(firstname)
+  const firstNames: string[] = _.map( members, (value) => {
+    let length: number=2;
+    const name = _.split(value.name, " " , length);
+    return name[0];
+ });
+ console.log(firstNames);
 
 
  //question2
  //Make everyone's last names in UPPERCASE in given array of objects
- var res = _.map(members,function get(value){
-    var names = value.name
-   
-    let lastindex = names.split(' ')
-    var x = lastindex[0];
-    var y = lastindex[1].toLocaleUpperCase()
-  
-    let ans = x+' '+y
-    console.log(ans)
-})
+const lastNames: string[] = _.map(members, (value) => {
+  let length: number = 2;
+  const name = _.split(value.name, " ", length);
+  return _.toUpper(name[1]);
+});
+console.log(lastNames);
 
-
-  //question3
+ //question3
   //Get entries where age is between 41-60
-  let u1 = _.filter(members, function(u) { return u.age>=41 && u.age<=60 });
-  console.log(u1);
+  const getTheAgeOfMember : m[] = _.filter(members, member => { 
+    _.inRange(member.age, 41, 60)
+  })
+  console.log(getTheAgeOfMember);
 
 
   //question4
   //Get average age
-  let mean_val = _.mean([20, 40, 41, 17, 45, 51]);  
-  console.log(mean_val);
+  const getAverageAgeOfMembers : number = _.mean([20, 40, 41, 17, 45, 51]);  
+  console.log(getAverageAgeOfMembers);
 
 
   //question5
   //Get Person with maximum age
-  let max_obj = _.maxBy(members, 'age');  
-  console.log(max_obj);
+  const getMaximumAgeOfMembers : m = _.maxBy(members, 'age');  
+  console.log(getMaximumAgeOfMembers);
 
 
 //question6
@@ -60,127 +58,92 @@ const members = [
 //  'noage': []
 //  }
 //  Less than 35yrs is young, above 35 is old
- var arr1: number[] = [];
- var arr2: number[] = [];
- var arr3: number[] = [];
-
-var objec  = _.map(members,function get(value){
-       if(value.age<35){
-        arr1.push(value.age)
-       }
-       else if(value.age>35){
-        arr2.push(value.age)
-       }
-       else{
-        arr3.push(value.age)
-       }
-  })
-
-var obje = {
-    'young':arr1,
-    'old':arr2,
-    'noage':arr3
+type ageGroup = {[x:string] : number[] | undefined }
+const groupMembersByAge :ageGroup = _.groupBy(members, (member) =>{
+  if(member.age<35){
+    return 'young'
+  }
+  else if(member.age>35){
+    return 'old'
+  }
+  else{
+    return 'noage'
+  }
 }
-console.log(obje)
+)
+console.log(groupMembersByAge);
 
-
-  
 
 
 //question8
 //extract first and second element using destructing
-console.log(_.nth(members, 0));
-console.log(_.nth(members, 1));
+const [a,b, ...rest] = members
+console.log('First and second element: ', a ,b);
+console.log('members', rest);
+
 
 
 //question9
 //Create a new array instance adding a new member at index 0,and keeping existing afterwards
-members.splice(0, 0, {name: 'harita'})
+ let addNewArrayOfMember : m[] = [{name : 'Harita sharma', age : 22}, ...members]
+ console.log('New Array', addNewArrayOfMember);
 
-console.log(members)
+
 
 
 //question1o
 // Extract properties of object using destructuring
-var result = _.each(members,function(value){
-    
-    console.log(value.name)
-    console.log(value.age)
-    
-  })
+   _.map(members, member => {
+    const {name,age} = member
+    console.log('name of member', name);
+    console.log('age of member' , age);
+  });
+
+
+
 
 
   //question11
   //Rename extracted property of object while destructing
-  Object.keys(members).forEach(function (key) {
-    members[key].number = members[key].age;
-    delete members[key].age;
-});
-console.log(members)
+   _.map(members, member => {
+    const {name: n, age} = member
+   
+   console.log('rename the key', n);
+   console.log(age);
+   })
+
+
+
+
 
 //question12
-var obj3: number[] = [];
-Object.keys(members).forEach(function(key){
-  obj3.push(members[key].name)
-  obj3.push(members[key].age)
-});
-const newArray = _.clone(obj3);
-console.log(obj3);
+//destructure any property of object and use spread operator to get remaining properties in an object
+const [x, ...rest1] = members
+console.log('element: ', x );
+console.log('members', rest1);
 
 
-
-//question7
-//add a new member to same members array instance at index 2
-var count=0;
- 
-Object.keys(members).forEach(function (key) {
-  count++;
-
-  if(count==2){
-      _.set(members[key], 'gender', 'male');
-  }
- 
-});
-console.log(members)
 
 //question13
-//Create a new object by copying using spread operator, override one of the properties to assign a new value in the same step
-var newobj = _.clone(members)
-  Object.keys(newobj).forEach(function (key) {
-    _.set(newobj[key], 'gender', 'male');
-});
-console.log(newobj)
+//Create a new object by copying using spread operator, override one of the properties
+// to assign a new value in the same step
+
+var addNewProperty = members.map(item => ({
+  ...item, gender: 'male'
+}))
+console.log(addNewProperty);
+
+
+
 
 //question14
 //Use reduce function on array and object
-const array = [1,2,3,4,5]
+var total = [20,22,30].reduce(function (a,b) { return a+b;});
+console.log("total is:" +total);
 
-var res = _.reduce(array,function sum(acc,value){
-       return acc+value
-},0)
-
-console.log(res)
-
-const obja = [
-    {
-        prod_name:"A",
-        price: 2300
-    },
-    {
-        prod_name:"B",
-        price: 200
-    },
-    {
-        prod_name:"C",
-        price: 2100
-    },
-   
-
-]
-
-var res = _.reduce(obja,function sum(acc,value){
-  
-    return acc+value.price
-},0)
-
-console.log(res)
+//question7
+//add a new member to same members array instance at index 2
+// members.splice(2,0, {name : 'Harita sharma', age: 22});
+// console.log(members)
+let addNewArrayOfMemberAtIndex : m[] = [a, b,  {name : 'Harita sharma', age : 22}, ...members]
+console.log('New Array', addNewArrayOfMemberAtIndex);
